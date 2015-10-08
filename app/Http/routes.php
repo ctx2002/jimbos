@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', 'CouponController@index');
+
+//Route::resource('coupon', 'CouponController');
+
+Route::resource('coupon', 'CouponController',
+                ['only' => ['store']]);
