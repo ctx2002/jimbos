@@ -144,7 +144,11 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        
+        /*
+         * SOAP provider
+         * ***/
+       Artisaninweb\SoapWrapper\ServiceProvider::class,
     ],
 
     /*
@@ -193,6 +197,7 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+        'Soap'      => Artisaninweb\SoapWrapper\Facade::class
 
     ],
 
