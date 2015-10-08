@@ -23,7 +23,7 @@ class CouponController extends Controller{
      * ***/
     public function show($id)
     {
-        
+        echo "jdslfdsl";
     }
     /**
      * Store a newly created resource in storage.
