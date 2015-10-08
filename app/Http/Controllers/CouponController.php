@@ -23,7 +23,8 @@ class CouponController extends Controller{
      */
     public function store(Request $request)
     {
-        //TODO: I have build a handler;
+        // Any exception thrown within the transaction 
+        // closure will cause the transaction to be rolled back automatically
         DB::transaction(function()
         {
             //DB::table('users')->update(array('votes' => 1));
