@@ -14,8 +14,17 @@ class CouponController extends Controller{
         //pages/contact
         //return view("pages.contact");
         var_dump($request->input("name"));
-    }*/
-    
+    }
+    */
+    /**
+     * Responds to requests to GET /coupon/show/8a25ff1d98
+     * 
+     * @paramter string $id a mail chimp id
+     * ***/
+    public function show($id)
+    {
+        
+    }
     /**
      * Store a newly created resource in storage.
      *
