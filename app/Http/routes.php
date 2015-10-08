@@ -16,4 +16,4 @@
 //Route::resource('coupon', 'CouponController');
 
 Route::resource('coupon', 'CouponController',
-                ['only' => ['store']]);
+                ['only' => ['store','show']]);
