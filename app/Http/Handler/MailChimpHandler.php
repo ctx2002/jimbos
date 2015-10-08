@@ -1,6 +1,7 @@
 <?php
 namespace  App\Http\Handler;
 use Illuminate\Http\Request;
+use Artisaninweb\SoapWrapper\Facades\SoapWrapper;
 
 class MailChimpHandler {
     
