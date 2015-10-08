@@ -12,21 +12,14 @@ class CreateJimboTables extends Migration
      */
     public function up()
     {
-        Schema::create('mail_chimp', function (Blueprint $table) {
+        Schema::create('coupons', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('mail_chimp_data_id', 10);
             $table->string('mail_chimp_list_id', 10);
+            $table->string('tcc_id', 10);
+            $table->date('pet_dob');
             $table->timestamp('added_on')->default(DB::raw('CURRENT_TIMESTAMP'));
-        });
-        
-        Schema::create('tcc', function(Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->increments('id');			
-            $table->integer('tcc_id')->unsigned()->default(0);
-            $table->integer('mail_chimp_id')->length(10)->unsigned();
-            $table->foreign('mail_chimp_id')->references('id')->on('mail_chimp')->onDelete('cascade');					
-            $table->timestamp('added_on')->default(DB::raw('CURRENT_TIMESTAMP'));		
         });
     }
 
@@ -37,7 +30,6 @@ class CreateJimboTables extends Migration
      */
     public function down()
     {
-        Schema::drop('tcc');
-        Schema::drop('mail_chimp');
+        Schema::drop('coupons');
     }
 }
