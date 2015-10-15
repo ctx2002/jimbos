@@ -2,6 +2,7 @@
 namespace  App\Http\Handler;
 use Illuminate\Http\Request;
 use App\Http\Handler\TccHandler;
+use App\Coupon;
 
 class MailChimpHandler {
     
@@ -18,7 +19,7 @@ class MailChimpHandler {
     }
     
     /***
-     * @return App\MailChimp returns a MailChimp model.
+     * @return App\MailChimp returns a Coupon model.
      * **/
     protected function subscribes(Request $request)
     {
@@ -44,7 +45,21 @@ class MailChimpHandler {
         //TODO: get id and list_id
         $tccHandler = new TccHandler();
         $tcc = $tccHandler->handle($request);
+        
+        //var_dump($tcc->RequestResult->Description);
         //TODO: exract tcc id
+        $tccId = trim($tcc->RequestResult->Description);
+        $mailId = $request->input('id');
+        $listId = $request->input('list_id');
+        
+        $coupon = new Coupon();
+        $coupon->mail_chimp_data_id = $request->input('id');
+        $coupon->mail_chimp_list_id = $request->input('list_id');
+        $coupon->tcc_id = $tcc->RequestResult->Description;
+        $coupon->save();
+        //var_dump($request->input('id'));
+        //var_dump($request->input('list_id'));
+        
         //at moment it returns following soap message.
         /**
          * <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
