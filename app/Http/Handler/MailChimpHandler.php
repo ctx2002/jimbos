@@ -49,12 +49,14 @@ class MailChimpHandler {
         //var_dump($tcc->RequestResult->Description);
         //TODO: exract tcc id
         $tccId = trim($tcc->RequestResult->Description);
-        $mailId = $request->input('id');
-        $listId = $request->input('list_id');
+        
         
         $coupon = new Coupon();
-        $coupon->mail_chimp_data_id = $request->input('id');
-        $coupon->mail_chimp_list_id = $request->input('list_id');
+        $data = $request->input('data');
+        //$id = $data['id']
+        //$list_id = $data['list_id']
+        $coupon->client_id = $data['id'];
+        $coupon->mail_chimp_list_id = $data['list_id'];
         $coupon->tcc_id = $tcc->RequestResult->Description;
         $coupon->save();
         //var_dump($request->input('id'));
