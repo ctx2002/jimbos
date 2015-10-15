@@ -3,17 +3,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Handler\MailChimpHandler;
-use App\Http\Handler\TccHandler;
+use App\Coupon;
+use Illuminate\Support\Facades\Redirect;
 
 class CouponController extends Controller{
     
     public function index(Request $request) {
-        
-        //return "index";
-        //return view("welcome");
-        //pages/contact
-        //return view("pages.contact");
-        var_dump($request->input("name"));
         
         $handler = new MailChimpHandler();
         $handler->handle($request);
@@ -26,6 +21,8 @@ class CouponController extends Controller{
      * ***/
     public function show($id)
     {
+        $result = Coupon::where('client_id', '=', $id)->first();
+        return Redirect::away($result->tcc_id);
     }
     /**
      * Store a newly created resource in storage.
@@ -38,11 +35,6 @@ class CouponController extends Controller{
         // closure will cause the transaction to be rolled back automatically
         DB::transaction(function() use ($request)
         {
-            //DB::table('users')->update(array('votes' => 1));
-
-            //DB::table('posts')->delete();
-            //TODO: call MailChimpHandler and save into db
-            //TODO: call TccHandler and save into db
             $handler = new MailChimpHandler();
             $handler->handle($request);
         });
