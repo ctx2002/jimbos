@@ -10,11 +10,6 @@ class TccSoapHandler extends SoapService {
     /**
      * @var string
      */
-    protected $wsdl = 'http://dev.couponcompany.co.nz/services/external.asmx?WSDL';
-    
-    /**
-     * @var string
-     */
     protected $name = 'jimbo';
     
     /**
@@ -22,12 +17,12 @@ class TccSoapHandler extends SoapService {
      */
     protected $trace = true;
     
-    /**
-     * @var string
-     * ***/
-    protected $tccKey = "e7153da2-8c8d-4e69-a78e-219b835b7bd7";
-    
-    protected $tccNumber = 18249;
+    public function __construct()
+    {
+        //TCC_WSDL stored in .env file
+        $this->wsdl = env('TCC_WSDL', '');
+        parent::__construct();
+    }
     
     public function functions()
     {
@@ -53,8 +48,8 @@ class TccSoapHandler extends SoapService {
     private function extractSoapData(Request $request)
     {
         $data = [
-            'APIKey' => $this->tccKey,
-            'TCCNumber'   => $this->tccNumber,
+            'APIKey' => env('TCC_KEY', ''),
+            'TCCNumber'   => env('TCC_NUMBER',''),
             'EmailAddress'     => 'ctx2002@gmail.com'
         ];
         return $data;
