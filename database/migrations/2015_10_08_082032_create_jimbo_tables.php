@@ -18,7 +18,7 @@ class CreateJimboTables extends Migration
             $table->string('mail_chimp_data_id', 10);
             $table->string('mail_chimp_list_id', 10);
             $table->string('tcc_id', 10);
-            $table->date('pet_dob');
+            $table->date('pet_dob')->nullable();
             $table->timestamp('added_on')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
