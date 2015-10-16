@@ -33,11 +33,11 @@ when clone/download into your own machine:
 2> php artisan key:generate
 3> php artisan migrate
 
-this app require >= PHP 5.5
-
 when push to prod server, need to change .env file
 To add 3 new fields:
 
 TCC_WSDL=
 TCC_KEY=
 TCC_NUMBER=
+this app require >= PHP 5.5
+
