@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Redirect;
 class CouponController extends Controller{
     
     public function index(Request $request) {
-        
         $handler = new MailChimpHandler();
         $handler->handle($request);
     }
@@ -18,10 +17,15 @@ class CouponController extends Controller{
      * Responds to requests to GET /coupon/show/8a25ff1d98
      * 
      * @paramter string $id a mail chimp id
+     * @paramter string $listId a mail chimp list id
      * ***/
-    public function show($id)
+    public function show($id,$listId)
     {
-        $result = Coupon::where('client_id', '=', $id)->first();
+        //var_dump($id,$listId); die();
+        $result = Coupon::where('client_id', '=', $id)
+                            ->where('mail_chimp_list_id', $listId)
+                            ->first();
+        //should we send a new request?
         return Redirect::away($result->tcc_id);
     }
     /**
