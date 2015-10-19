@@ -48,14 +48,21 @@ class TccSoapHandler extends SoapService {
     private function extractSoapData(Request $request)
     {
         //data[email]
-        //$data = $request->input(data);
+        $temp = $request->input('data');
+        //var_dump($temp);
         //$email = $data['email']
         //TODO: change email,at moment, it is hard coded
+        
+        //data[merges][EMAIL]
         $data = [
             'APIKey' => env('TCC_KEY', ''),
             'TCCNumber'   => env('TCC_NUMBER',''),
-            'EmailAddress'     => 'ctx2002@gmail.com'
+            'EmailAddress'     => $temp['merges']['EMAIL'],
+            'FirstName' => $temp['merges']['FNAME'],
+            'LastName'  => $temp['merges']['LNAME']
         ];
+        
+        //var_dump($data); die();
         return $data;
     }
     

@@ -26,7 +26,11 @@ class CouponController extends Controller{
                             ->where('mail_chimp_list_id', $listId)
                             ->first();
         //should we send a new request?
-        return Redirect::away($result->tcc_id);
+        if ($result) {
+            return Redirect::away($result->tcc_id);
+        }
+        
+        abort(404);
     }
     /**
      * Store a newly created resource in storage.
