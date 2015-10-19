@@ -21,6 +21,9 @@ class TccSoapHandler extends SoapService {
     {
         //TCC_WSDL stored in .env file
         $this->wsdl = env('TCC_WSDL', '');
+        $this->options( array('http'=>array(
+            'user_agent' => 'PHPSoapClient'
+            )) );
         parent::__construct();
     }
     
@@ -49,11 +52,6 @@ class TccSoapHandler extends SoapService {
     {
         //data[email]
         $temp = $request->input('data');
-        //var_dump($temp);
-        //$email = $data['email']
-        //TODO: change email,at moment, it is hard coded
-        
-        //data[merges][EMAIL]
         $data = [
             'APIKey' => env('TCC_KEY', ''),
             'TCCNumber'   => env('TCC_NUMBER',''),
@@ -62,7 +60,6 @@ class TccSoapHandler extends SoapService {
             'LastName'  => $temp['merges']['LNAME']
         ];
         
-        //var_dump($data); die();
         return $data;
     }
     

@@ -13,7 +13,6 @@
 
 //Route::get('/', 'CouponController@index');
 
-
-Route::get('coupon/{clientId}/{listId}', array('uses' => 'CouponController@show', 'as' => 'coupon.show'));
+Route::get('coupon/{clientId}/{listId}/{campaignId}', array('uses' => 'CouponController@show', 'as' => 'coupon.show'));
 Route::resource('coupon', 'CouponController',
                 ['only' => ['store','index']]);

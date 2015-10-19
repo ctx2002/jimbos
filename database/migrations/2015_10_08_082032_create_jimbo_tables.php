@@ -24,6 +24,8 @@ class CreateJimboTables extends Migration
             $table->string('lname',64);
             $table->string('email',64);
             $table->timestamp('added_on')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->date('downloding_link_date')->nullable();
+            $table->string('type',16);
         });
     }
 

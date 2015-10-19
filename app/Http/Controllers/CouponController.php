@@ -3,8 +3,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Handler\MailChimpHandler;
-use App\Coupon;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Handler\CouponHandler;
 
 class CouponController extends Controller{
     
@@ -19,19 +19,13 @@ class CouponController extends Controller{
      * @paramter string $id a mail chimp id
      * @paramter string $listId a mail chimp list id
      * ***/
-    public function show($id,$listId)
-    {
-        //var_dump($id,$listId); die();
-        $result = Coupon::where('client_id', '=', $id)
-                            ->where('mail_chimp_list_id', $listId)
-                            ->first();
-        //should we send a new request?
-        if ($result) {
-            return Redirect::away($result->tcc_id);
-        }
-        
-        abort(404);
+    public function show($id,$listId,$campaignId)
+    {           
+        $handler = new CouponHandler();
+        $coupon = $handler->show($id, $listId, $campaignId);
+        return Redirect::away($coupon->tcc_id);
     }
+    
     /**
      * Store a newly created resource in storage.
      *

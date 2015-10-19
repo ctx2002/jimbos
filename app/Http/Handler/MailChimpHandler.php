@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Handler\TccHandler;
 use App\Coupon;
 
+
 class MailChimpHandler {
     
     public function __construct()
@@ -15,7 +16,56 @@ class MailChimpHandler {
         $name = $request->input('type');
         if ('subscribe' == $name) {
             $this->subscribes($request);
+        } else if ('profile' == $name) {
+            $this->profile($request);
+        } else {
+            abort(404);
         }
+    }
+    
+    protected function profile(Request $request)
+    {
+//        "type": "profile", 
+//"fired_at": "2009-03-26 21:31:21", 
+//"data[id]": "8a25ff1d98", 
+//"data[list_id]": "a6b5da1054",
+//"data[email]": "api@mailchimp.com", 
+//"data[email_type]": "html", 
+//"data[merges][EMAIL]": "api@mailchimp.com", 
+//"data[merges][FNAME]": "MailChimp", 
+//"data[merges][LNAME]": "API", 
+//"data[merges][INTERESTS]": "Group1,Group2", 
+//"data[ip_opt]": "10.20.10.30" 
+        
+        $tccHandler = new TccHandler();
+        $tcc = $tccHandler->handle($request);
+        
+        $coupon = new Coupon();
+        $data = $request->input('data');
+        //$client_id = $data['id'];
+        //$list_id = $data['list_id'];
+        //$compaign_id = $data['merges']['campaign_uid'];
+        
+//        $coupon = Coupon::where('client_id', '=', $data['id'])
+//                            ->where('mail_chimp_list_id', $data['list_id'])
+//                            ->where('campaign_id', $data['merges']['campaign_uid'])
+//                            ->firstOrFail();
+        $coupon->client_id = $data['id'];
+        $coupon->mail_chimp_list_id = $data['list_id'];
+        $coupon->campaign_id = $data['merges']['campaign_uid'];
+        $coupon->tcc_id = $tcc->RequestResult->Description;
+        $coupon->fname = $data['merges']['FNAME'];
+        $coupon->lname = $data['merges']['LNAME'];
+        $coupon->email = $data['merges']['EMAIL'];
+        $coupon->pet_dob = $data['pet_dob'];
+        $coupon->type = 'pet';
+        $coupon->save();
+        //$id = $data['id']
+        //$list_id = $data['list_id']
+        //$coupon->client_id = $data['id'];
+        //$coupon->mail_chimp_list_id = $data['list_id'];
+        //$coupon->tcc_id = $tcc->RequestResult->Description;
+        //$coupon->save();
     }
     
     /***
@@ -48,16 +98,20 @@ class MailChimpHandler {
         
         //var_dump($tcc->RequestResult->Description);
         //TODO: exract tcc id
-        $tccId = trim($tcc->RequestResult->Description);
+        //$tccId = trim($tcc->RequestResult->Description);
         
         
         $coupon = new Coupon();
         $data = $request->input('data');
-        //$id = $data['id']
-        //$list_id = $data['list_id']
+        
         $coupon->client_id = $data['id'];
         $coupon->mail_chimp_list_id = $data['list_id'];
+        $coupon->campaign_id = $data['merges']['campaign_uid'];
         $coupon->tcc_id = $tcc->RequestResult->Description;
+        $coupon->fname = $data['merges']['FNAME'];
+        $coupon->lname = $data['merges']['LNAME'];
+        $coupon->email = $data['merges']['EMAIL'];
+        $coupon->type = 'subscribe';
         $coupon->save();
         //var_dump($request->input('id'));
         //var_dump($request->input('list_id'));
