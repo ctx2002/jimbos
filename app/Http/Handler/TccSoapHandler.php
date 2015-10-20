@@ -32,13 +32,39 @@ class TccSoapHandler extends SoapService {
         return $this->getFunctions();
     }
     
+    public function handle(\App\Coupon $coupon)
+    {
+        $data = [
+            'APIKey' => env('TCC_KEY', ''),
+            'TCCNumber'   => env('TCC_NUMBER',''),
+            'EmailAddress'     => $coupon->email,
+            'FirstName' => $coupon->fname,
+            'LastName'  => $coupon->lname
+        ];
+        
+        return $this->sendSoapRequest($data);
+    }
+    
     /**
      * 
      * ***/
-    public function handle(Request $request)
+    /*public function handle(Request $request)
     {
         
         $data = $this->extractSoapData($request);
+        
+        return $this->sendSoapRequest($data);
+    }*/
+    
+    public function getNewPetCoupon(\App\Coupon $coupon)
+    {
+        $data = [
+            'APIKey' => env('TCC_KEY', ''),
+            'TCCNumber'   => env('TCC_NUMBER',''),
+            'EmailAddress'     => $coupon->email,
+            'FirstName' => $coupon->fname,
+            'LastName'  => $coupon->lname
+        ];
         
         return $this->sendSoapRequest($data);
     }
