@@ -11,8 +11,8 @@
 |
 */
 
-//Route::get('/', 'CouponController@index');
+Route::get('/coupon/pet/{clientId}/{compaignId}/{dob}', array('uses' => 'CouponController@pet', 'as' => 'coupon.pet'));
 
-Route::get('coupon/{clientId}/{listId}/{campaignId}', array('uses' => 'CouponController@show', 'as' => 'coupon.show'));
+Route::get('coupon/{clientId}/{campaignId}', array('uses' => 'CouponController@show', 'as' => 'coupon.show'));
 Route::resource('coupon', 'CouponController',
                 ['only' => ['store','index']]);
