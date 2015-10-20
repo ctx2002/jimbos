@@ -7,6 +7,9 @@ use App\Coupon;
 
 class MailChimpHandler {
     
+    const TCC_NUMBER_NORMAL = 18249;
+    const TCC_NUMBER_PET = 18249;
+    
     public function __construct()
     {
     }
@@ -37,12 +40,9 @@ class MailChimpHandler {
 //"data[merges][INTERESTS]": "Group1,Group2", 
 //"data[ip_opt]": "10.20.10.30" 
         
-        $tccHandler = new TccHandler();
+        $tccHandler = new TccHandler(env('TCC_NUMBER_PET',''));
         $tcc = $tccHandler->handle($coupon);
-        
-        
         $coupon->tcc_id = $tcc->RequestResult->Description;
-        
         $coupon->save();
         
     }
@@ -70,7 +70,7 @@ class MailChimpHandler {
          * **/
         
         
-        $tccHandler = new TccHandler();
+        $tccHandler = new TccHandler(env('TCC_NUMBER_NORMAL',''));
         $tcc = $tccHandler->handle($coupon);
         
         $coupon->tcc_id = $tcc->RequestResult->Description;

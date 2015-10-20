@@ -8,10 +8,14 @@ use App\Http\Handler\TccSoapHandler;
 
 class TccHandler
 {
-    
+    private $tcc_number;
+    public function __construct($tcc_number)
+    {
+        $this->tcc_number = $tcc_number;
+    }
     public function handle(\App\Coupon $coupon)
     {    
-        $soap = new TccSoapHandler();
+        $soap = new TccSoapHandler($this->tcc_number);
         return $soap->handle($coupon);
 //        $obj = new \stdClass();
 //        $obj->RequestResult = new \stdClass();

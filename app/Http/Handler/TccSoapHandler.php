@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Handler;
 use Artisaninweb\SoapWrapper\Extension\SoapService;
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 
 class TccSoapHandler extends SoapService {
     
@@ -17,13 +16,16 @@ class TccSoapHandler extends SoapService {
      */
     protected $trace = true;
     
-    public function __construct()
+    private $tcc_number;
+    public function __construct($tcc_number)
     {
         //TCC_WSDL stored in .env file
         $this->wsdl = env('TCC_WSDL', '');
         $this->options( array('http'=>array(
             'user_agent' => 'PHPSoapClient'
             )) );
+        $this->tcc_number = $tcc_number;
+        
         parent::__construct();
     }
     
@@ -36,31 +38,8 @@ class TccSoapHandler extends SoapService {
     {
         $data = [
             'APIKey' => env('TCC_KEY', ''),
-            'TCCNumber'   => env('TCC_NUMBER',''),
-            'EmailAddress'     => $coupon->email,
-            'FirstName' => $coupon->fname,
-            'LastName'  => $coupon->lname
-        ];
-        
-        return $this->sendSoapRequest($data);
-    }
-    
-    /**
-     * 
-     * ***/
-    /*public function handle(Request $request)
-    {
-        
-        $data = $this->extractSoapData($request);
-        
-        return $this->sendSoapRequest($data);
-    }*/
-    
-    public function getNewPetCoupon(\App\Coupon $coupon)
-    {
-        $data = [
-            'APIKey' => env('TCC_KEY', ''),
-            'TCCNumber'   => env('TCC_NUMBER',''),
+            //'TCCNumber'   => env('TCC_NUMBER',''),
+            'TCCNumber' => $this->tcc_number,
             'EmailAddress'     => $coupon->email,
             'FirstName' => $coupon->fname,
             'LastName'  => $coupon->lname
@@ -74,7 +53,7 @@ class TccSoapHandler extends SoapService {
         return $result->RequestResult->Code;    
     }
     
-    private function extractSoapData(Request $request)
+    /*private function extractSoapData(Request $request)
     {
         //data[email]
         $temp = $request->input('data');
@@ -87,7 +66,7 @@ class TccSoapHandler extends SoapService {
         ];
         
         return $data;
-    }
+    }*/
     
     private function sendSoapRequest($data)
     {

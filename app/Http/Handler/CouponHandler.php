@@ -26,37 +26,33 @@ class CouponHandler {
                             ->where('pet_dob', '=' , $dob)
                             ->firstOrFail();
         
-        //if is first 6 month? which means , just send back tcc information
-        if ($this->diffInMonth($result) < 0) {
-            return null;
-        } else if ($this->isFirst6Month($result)) {
-            return $result;
-        } else {
-            //not first 6 month, but less than 6 month to dob
-            if ($this->isLessThan6Month($result)) {
-                //fetching a new pdf
-                $tccHandler = new TccHandler();
+        
+        if($this->isLessThan6Month($result)) {
+            if ($this->isFirst6Month($result)) {
+                return $result;
+            } else if (!$this->isUpdateWithin6Month($result)) {
+                $tccHandler = new TccHandler(env('TCC_NUMBER_PET',''));
                 $tcc = $tccHandler->handle($result);
                 //$tcc = $tccHandler->getNewPetCoupon($result);
                 $result->tcc_id = $tcc->RequestResult->Description;
-                $result->save();
-                return $result;
+                $result->added_on = Carbon::now()->toDateString();
+                $result->save();  
             }
         }
         
-        return null;
+        return $result;
     }
     
-    protected function diffInMonth(\App\Coupon $coupon)
+    protected function diffInMonth($dataStr, $format="Y-m-d")
     {
         $now = Carbon::now();
-        $dob = Carbon::createFromFormat('Y-m-d', $coupon->pet_dob);
+        $dob = Carbon::createFromFormat($format, $dataStr);
         return $now->diffInMonths($dob);
     }
     
     protected function isFirst6Month(\App\Coupon $coupon)
     {
-        $month = $this->diffInMonth($coupon);
+        $month = $this->diffInMonth($coupon->pet_dob);
         if ($month  <= 6) {
             return true;
         }
@@ -68,12 +64,24 @@ class CouponHandler {
     
     protected function isLessThan6Month(\App\Coupon $coupon)
     {
-        $month = $this->diffInMonth($coupon);       
+        $month = $this->diffInMonth($coupon->pet_dob);       
         if ($month  < 0) return false;
         
+        //pet birth day is 6 months to current date
         if ($month % 12 >=0 && $month % 12 <= 6) {
             return true;
         }
+        
+        return false;
+    }
+    
+    private function isUpdateWithin6Month(\App\Coupon $coupon)
+    {
+        $updateMonth = $this->diffInMonth($coupon->added_on,'Y-m-d H:i:s');
+        if ($updateMonth <= 6) {
+            return true;
+        }
+        
         return false;
     }
     
