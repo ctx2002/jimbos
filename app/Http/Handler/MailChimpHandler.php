@@ -16,9 +16,12 @@ class MailChimpHandler {
     
     public function handle(\App\Coupon $coupon, $type)
     {
+        //mailchimp webhook calls our api
         if ('subscribe' == $type) {
+            //webhook subscribe event
             return $this->subscribes($coupon);    
         } else if ('profile' == $type) {
+            //webhook Profile Updates event
             $this->profile($coupon);
         } else {
             abort(404);
