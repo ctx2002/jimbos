@@ -7,9 +7,6 @@ use App\Coupon;
 
 class MailChimpHandler {
     
-    const TCC_NUMBER_NORMAL = 18249;
-    const TCC_NUMBER_PET = 18249;
-    
     public function __construct()
     {
     }
